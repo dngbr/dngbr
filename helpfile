@@ -1,0 +1,70 @@
+class FoodTruckType(object):
+    def __init__(self, food_truck_type, tax, discount):
+        self._truck_type = food_truck_type
+        self._tax = tax
+        self._discount = discount
+
+    @property
+    def food_truck_type(self):
+        return self._truck_type
+
+    @property
+    def tax(self):
+        return self._tax
+
+    @property
+    def discount(self):
+        return self._discount
+
+
+class Product(object):
+    def __init__(self, product_name, price):
+        self._product_name = product_name
+        self._product_price = price
+
+    @property
+    def price(self):
+        return self._product_price
+
+
+class Truck(FoodTruckType):
+
+    def __init__(self, truck, food_type: FoodTruckType, products):
+        self._truck = truck
+        super().__init__()
+        self._products = products
+        self._sold_products = []
+
+    @property
+    def products(self):
+        return self._products
+
+    def sell_product(self, product: Product):
+        self._sold_products.append(product)
+        for i in self._products:
+            if i == product:
+                self._products.quantity = self._products.quantity - 1
+
+    def get_total_income(self):
+        total_income = 0
+        for i in self._sold_products:
+            total_income = total_income + i.price - \
+                (self._food_type.tax/100*i.price) - \
+                (self._food_type.discount/100*i.price)
+        return total_income
+
+
+ft = FoodTruckType('fast food', 20, 15)
+
+p = Product('a', 10)
+p2 = Product('b', 20)
+lp = []
+lp.append((p, 10))
+lp.append((p2, 5))
+
+t = Truck('truck 1 ', ft, lp)
+
+
+t.sell_product(p)
+
+print(t.get_total_income())
